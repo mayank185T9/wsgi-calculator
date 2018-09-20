@@ -43,12 +43,27 @@ To submit your homework:
 
 """
 
+def index(*args):
+    page = """
+    <h1>WSGI Calculator</h1>
+    
+    <h2>Use Examples</h2>
+      <ol>
+        <li>To add: append /add/number1/number2 to URL</li>
+        <li>To subtract: append /subtract/number1/number2 to URL</li>
+        <li>To multiply: append /multiply/number1/number2 to URL</li>
+        <li>To divide: append /divide/number1/number2 to URL</li>
+      </ol>
+    """
+    return page
+
 
 def add(*args):
     """ Returns a STRING with the sum of the arguments """
 
     # TODO: Fill sum with the correct value, based on the
     # args provided.
+    print("Inside Add")
     sum = 0
     for arg in args:
         try:
@@ -62,6 +77,7 @@ def add(*args):
 
 def multiply(*args):
     """ Return a STRING with the product of the arguments """
+    print("Inside Multiply")
     product = 1
     print("Product is {}".format(product))
     for arg in args:
@@ -76,10 +92,12 @@ def multiply(*args):
 def divide(*args):
     """ Return a STRING with the quotient of the first arg to the second arg.
     Allow only two args. """
-    if len(*args) > 2:
-        return "No more than 2 input numbers permitted"
+    print("Inside Divide")
+    #if len(*args) > 2:
+    #    return "No more than 2 input numbers permitted"
 
     dividend, divisor = args
+    print("The dividend is {} and the divisor is {}".format(dividend, divisor))
     for arg in args:
         try:
             quotient = int(dividend)/int(divisor)
@@ -91,8 +109,9 @@ def divide(*args):
 def subtract(*args):
     """ Return a STRING of the difference of first arg minus second arg.
     Allow only two args."""
-    if len(*args) > 2:
-        return "No more than 2 input numbers permitted"
+    print("Inside Subtract")
+    #if len(*args) > 2:
+    #    return "No more than 2 input numbers permitted"
 
     num1, num2 = args
     for arg in args:
@@ -112,7 +131,8 @@ def resolve_path(path):
         'add': add,
         'multiply': multiply,
         'subtract': subtract,
-        'divide' : divide
+        'divide' : divide,
+        '' : index
     }
 
     path = path.strip('/').split('/')
@@ -149,6 +169,7 @@ def application(environ, start_response):
         func, args = resolve_path(path)
         print("the parsed func is {} and args are {}".format(func,args))
         body = func(*args)
+        print("Func was found and returned body {}".format(body))
         status = "200 OK"
     except NameError:
         status = "404 Not Found"
